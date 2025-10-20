@@ -1,3 +1,4 @@
+// ...existing code...
 <!DOCTYPE html>
 <html lang="en">
 
@@ -465,7 +466,7 @@
         <use id="useThePath" xlink:href="#partialPath" stroke="white" stroke-width=".5" stroke-opacity=".5" fill="none"
             style="display:none;" />
     </svg>
-	
+    
     <script>
         let rid = null; // request animation id
         const SVG_NS = "http://www.w3.org/2000/svg";
@@ -666,13 +667,18 @@
             }
         });
 
-        cb.addEventListener("input", () => {
-            if (cb.checked) {
-                useThePath.style.display = "block";
-            } else {
-                useThePath.style.display = "none";
-            }
-        });
+        // cb might be an input checkbox elsewhere; if not present, guard to avoid errors
+        if (typeof cb !== 'undefined' && cb) {
+            cb.addEventListener("input", () => {
+                if (cb.checked) {
+                    useThePath.style.display = "block";
+                } else {
+                    useThePath.style.display = "none";
+                }
+            });
+        } else {
+            // if no cb element, ensure useThePath default stays as is
+        }
     </script>
 
     <div id="castle" style="display: none;">
@@ -758,7 +764,6 @@
 
     <!-- aa3 -->
     <script>
-
         (() => {
             setTimeout(() => {
                 document.querySelector("#text-click").style.display="inherit";
@@ -861,32 +866,9 @@
 
         })();
     </script>
-    <html>
-    <body>
-    <audio id="playAudio" controls loop preload="auto">
-        <source src="nhachay.mp3" type="audio/mpeg">
-        Trình duyệt của bạn không hỗ trợ audio.
-    </audio>
 
     <script>
-        const a = document.getElementById('playAudio');
-
-        // Thử autoplay (nhiều trình duyệt cho phép autoplay khi muted)
-        a.muted = true;
-        a.play().catch(e => console.warn('Autoplay bị chặn:', e));
-
-        // Bật âm sau khi người dùng tương tác
-        document.addEventListener('click', function once() {
-        a.muted = false;
-        a.play().catch(()=>{});
-        document.removeEventListener('click', once);
-        });
-    </script>
-    </body>
-    </html>
-    
-    
-    <script>
+        // leaf/rose drawing after animations
         var leafOne = document.querySelector('.leafOne');
         var stickLine = document.querySelector('.stickLine');
         var leafTwo = document.querySelector('.leafTwo');
@@ -903,61 +885,55 @@
             duration: 4000,
             begin: function (anim) {
                 //Leaf One
-                leafOne.setAttribute("stroke", "black");
-                leafOne.setAttribute("fill", "none");
-                // Leaf Two
-                leafTwo.setAttribute("stroke", "black");
-                leafTwo.setAttribute("fill", "none");
-                //Stick
-                stickLine.setAttribute("stroke", "black");
-                stickLine.setAttribute("fill", "none");
-                // Leaf S1
-                leafS1.setAttribute("stroke", "black");
-                leafS1.setAttribute("fill", "none");
-                //Rose One
-                rose1.setAttribute("stroke", "black");
-                rose1.setAttribute("fill", "none");
-                //Rose Two
-                rose2.setAttribute("stroke", "black");
-                rose2.setAttribute("fill", "none");
-                //Rose Three
-                rose3.setAttribute("stroke", "black");
-                rose3.setAttribute("fill", "none");
-                //Rose Three
-                rose4.setAttribute("stroke", "black");
-                rose4.setAttribute("fill", "none");
+                if (leafOne) { leafOne.setAttribute("stroke", "black"); leafOne.setAttribute("fill", "none"); }
+                if (leafTwo) { leafTwo.setAttribute("stroke", "black"); leafTwo.setAttribute("fill", "none"); }
+                if (stickLine) { stickLine.setAttribute("stroke", "black"); stickLine.setAttribute("fill", "none"); }
+                if (leafS1) { leafS1.setAttribute("stroke", "black"); leafS1.setAttribute("fill", "none"); }
+                if (rose1) { rose1.setAttribute("stroke", "black"); rose1.setAttribute("fill", "none"); }
+                if (rose2) { rose2.setAttribute("stroke", "black"); rose2.setAttribute("fill", "none"); }
+                if (rose3) { rose3.setAttribute("stroke", "black"); rose3.setAttribute("fill", "none"); }
+                if (rose4) { rose4.setAttribute("stroke", "black"); rose4.setAttribute("fill", "none"); }
             },
             complete: function (anim) {
-                //Leaf One
-                leafOne.setAttribute("fill", "#375616");
-                leafOne.setAttribute("stroke", "none");
-                //Leaf Two 
-                leafTwo.setAttribute("fill", "#183601");
-                leafTwo.setAttribute("stroke", "none");
-                //Stick
-                stickLine.setAttribute("fill", "#433b0d");
-                stickLine.setAttribute("stroke", "none");
-                // Leaf S1
-                leafS1.setAttribute("fill", "#2d3e03");
-                leafS1.setAttribute("stroke", "none");
-                // Rose 1
-                rose1.setAttribute("fill", "#53140b");
-                rose1.setAttribute("stroke", "none");
-                // Rose 2
-                rose2.setAttribute("fill", "#81110c");
-                rose2.setAttribute("stroke", "none");
-                // Rose 3
-                rose3.setAttribute("fill", "#a80406");
-                rose3.setAttribute("stroke", "none");
-                // Rose 3
-                rose4.setAttribute("fill", "#9c0003");
-                rose4.setAttribute("stroke", "none");
+                if (leafOne) { leafOne.setAttribute("fill", "#375616"); leafOne.setAttribute("stroke", "none"); }
+                if (leafTwo) { leafTwo.setAttribute("fill", "#183601"); leafTwo.setAttribute("stroke", "none"); }
+                if (stickLine) { stickLine.setAttribute("fill", "#433b0d"); stickLine.setAttribute("stroke", "none"); }
+                if (leafS1) { leafS1.setAttribute("fill", "#2d3e03"); leafS1.setAttribute("stroke", "none"); }
+                if (rose1) { rose1.setAttribute("fill", "#53140b"); rose1.setAttribute("stroke", "none"); }
+                if (rose2) { rose2.setAttribute("fill", "#81110c"); rose2.setAttribute("stroke", "none"); }
+                if (rose3) { rose3.setAttribute("fill", "#a80406"); rose3.setAttribute("stroke", "none"); }
+                if (rose4) { rose4.setAttribute("fill", "#9c0003"); rose4.setAttribute("stroke", "none"); }
             },
             autoplay: true,
         });
-
-
     </script>
-</body>
 
+    <!-- single audio block, inside the body and only once -->
+    <audio id="playAudio" controls loop preload="auto">
+        <source src="nhachay.mp3" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ audio.
+    </audio>
+
+    <script>
+        // autoplay often blocked unless muted / user interacted
+        (function () {
+            const a = document.getElementById('playAudio');
+            if (!a) return;
+            // attempt muted autoplay (browsers usually allow this)
+            a.muted = true;
+            a.play().catch(e => console.warn('Autoplay bị chặn:', e));
+            // on first user gesture, unmute and play
+            function once() {
+                a.muted = false;
+                a.play().catch(() => { });
+                document.removeEventListener('click', once);
+                document.removeEventListener('keydown', once);
+            }
+            document.addEventListener('click', once);
+            document.addEventListener('keydown', once);
+        })();
+    </script>
+
+</body>
 </html>
+// ...existing code...
