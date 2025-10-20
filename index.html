@@ -861,10 +861,31 @@
 
         })();
     </script>
-
-    <audio autoplay loop  id="playAudio">
-      <source src="nhachay.mp3">
+    <html>
+    <body>
+    <audio id="playAudio" controls loop preload="auto">
+        <source src="nhachay.mp3" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ audio.
     </audio>
+
+    <script>
+        const a = document.getElementById('playAudio');
+
+        // Thử autoplay (nhiều trình duyệt cho phép autoplay khi muted)
+        a.muted = true;
+        a.play().catch(e => console.warn('Autoplay bị chặn:', e));
+
+        // Bật âm sau khi người dùng tương tác
+        document.addEventListener('click', function once() {
+        a.muted = false;
+        a.play().catch(()=>{});
+        document.removeEventListener('click', once);
+        });
+    </script>
+    </body>
+    </html>
+    
+    
     <script>
         var leafOne = document.querySelector('.leafOne');
         var stickLine = document.querySelector('.stickLine');
